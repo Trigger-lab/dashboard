@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transformer Locator</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 600px; }
+        #prediction { margin-top: 20px; }
+        .custom-icon {
+            background: white;
+            border-radius: 50%;
+            border: 2px solid #000;
+            text-align: center;
+            line-height: 24px; /* Adjust according to the icon size */
+            transition: background-color 0.5s ease;
+        }
+        .blinking {
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .info-table {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: skyblue;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            width: 6cm;
+            height: 4cm;
+            z-index: 1000; /* Ensure it is on top of the map */
+            font-family: Arial, sans-serif;
+        }
+        .info-table input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        .info-table button {
+            width: 100%;
+            padding: 5px;
+            background-color: white;
+            color: skyblue;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .info-table button:hover {
+            background-color: lightgray;
+        }
+        .data-display {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: lightgray;
+            color: black;
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 1000;
+            font-family: Arial, sans-serif;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transformer Locator</h1>
+    <div class="info-table">
+        <form id="searchForm">
+            <label for="transformerId">Enter Transformer ID number:</label>
+            <input type="text" id="transformerId" name="transformerId">
+            <button type="button" onclick="findTransformer()">Find Transformer</button>
+        </form>
+    </div>
+    <div id="map"></div>
+    <div id="prediction">Click on a marker to see the predicted load.</div>
+    <div id="dataDisplay" class="data-display">Select a transformer to view its data.</div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([-19.0, 29.0], 7);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Example transformer data with additional details
+        var transformers = [
+            { id: "T001", city: "Gweru", lat: -19.4500, lon: 29.4500, oilLevel: 45.00, performance: "Poor", condition: "Bad", voltage: "150V", current: "20A" },
+            { id: "T002", city: "Kadoma", lat: -18.3333, lon: 29.9167, oilLevel: 75.00, performance: "Good", condition: "Normal", voltage: "230V", current: "13A" },
+            { id: "T003", city: "Bulawayo", lat: -20.0000, lon: 28.5833, oilLevel: 85.00, performance: "Excellent", condition: "Normal", voltage: "250V", current: "15A" },
+            { id: "T004", city: "Mutare", lat: -18.9700, lon: 32.6500, oilLevel: 60.00, performance: "Fair", condition: "Average", voltage: "120V", current: "17A" },
+            { id: "T005", city: "Harare", lat: -17.8292, lon: 31.0522, suburbs: [
+                { id: "T006", name: "Waterfalls", lat: -17.8181, lon: 31.0600, oilLevel: 30.00, performance: "Poor", condition: "Requires Repair", voltage: "100V", current: "20A" },
+                { id: "T007", name: "Mbare", lat: -17.8236, lon: 31.0506, oilLevel: 70.00, performance: "Good", condition: "Normal", voltage: "245V", current: "15A" },
+                { id: "T008", name: "Highfields", lat: -17.8250, lon: 31.0450, oilLevel: 80.00, performance: "Good", condition: "Normal", voltage: "247V", current: "15A" },
+                { id: "T009", name: "Kuwadzana", lat: -17.8261, lon: 31.0428, oilLevel: 90.00, performance: "Excellent", condition: "Normal", voltage: "250V", current: "14A" }
+            ]}
+        ];
+
+        var markers = {}; // Store marker references for easy updating
+
+        // Function to get color based on oil level
+        function getColor(oilLevel) {
+            if (oilLevel < 50) return 'red';
+            if (oilLevel < 80) return 'blue';
+            return 'green';
+        }
+
+        // Function to create popup content
+        function getPopupContent(transformer) {
+            return `
+                <strong>ID:</strong> ${transformer.id} <br>
+                <strong>City/Suburb:</strong> ${transformer.city || transformer.name} <br>
+                <strong>Oil Level:</strong> ${transformer.oilLevel.toFixed(2)}% <br>
+                <strong>Performance:</strong> ${transformer.performance} <br>
+                <strong>Condition:</strong> ${transformer.condition} <br>
+                <strong>Voltage:</strong> ${transformer.voltage} <br>
+                <strong>Current:</strong> ${transformer.current}
+            `;
+        }
+
+        // Add markers for transformers with enlarged pins
+        transformers.forEach(function(t) {
+            if (t.suburbs) {
+                t.suburbs.forEach(function(suburb) {
+                    var iconClass = suburb.oilLevel < 50 ? 'custom-icon blinking' : 'custom-icon';
+                    var marker = L.marker([suburb.lat, suburb.lon], {
+                        icon: L.divIcon({
+                            className: iconClass,
+                            html: '<div style="background-color:' + getColor(suburb.oilLevel) + '; width: 30px; height: 30px; border-radius: 50%; font-size: 16px; color: white; display: flex; align-items: center; justify-content: center;">' + suburb.oilLevel.toFixed(2) + '%</div>',
+                            iconSize: [30, 30] // Increase icon size
+                        })
+                    }).addTo(map)
+                        .bindPopup(getPopupContent(suburb))
+                        .on('click', function() {
+                            fetchPrediction(suburb.lat, suburb.lon);
+                            updateDataDisplay(suburb);
+                        });
+
+                    markers[suburb.id] = marker;
+                });
+            } else {
+                var iconClass = t.oilLevel < 50 ? 'custom-icon blinking' : 'custom-icon';
+                var marker = L.marker([t.lat, t.lon], {
+                    icon: L.divIcon({
+                        className: iconClass,
+                        html: '<div style="background-color:' + getColor(t.oilLevel) + '; width: 30px; height: 30px; border-radius: 50%; font-size: 16px; color: white; display: flex; align-items: center; justify-content: center;">' + t.oilLevel.toFixed(2) + '%</div>',
+                        iconSize: [30, 30] // Increase icon size
+                    })
+                }).addTo(map)
+                    .bindPopup(getPopupContent(t))
+                    .on('click', function() {
+                        fetchPrediction(t.lat, t.lon);
+                        updateDataDisplay(t);
+                    });
+
+                markers[t.id] = marker;
+            }
+        });
+
+        function updateDataDisplay(transformer) {
+            var display = document.getElementById('dataDisplay');
+            display.innerHTML = `
+                <h3>Transformer Data</h3>
+                <strong>ID:</strong> ${transformer.id}<br>
+                <strong>City/Suburb:</strong> ${transformer.city || transformer.name}<br>
+                <strong>Oil Level:</strong> ${transformer.oilLevel.toFixed(2)}%<br>
+                <strong>Performance:</strong> ${transformer.performance}<br>
+                <strong>Condition:</strong> ${transformer.condition}<br>
+                <strong>Voltage:</strong> ${transformer.voltage}<br>
+                <strong>Current:</strong> ${transformer.current}<br>
+            `;
+        }
+
+        function fetchPrediction(lat, lon) {
+            fetch('http://localhost:5000/predict', { // Replace with your API endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ features: [lat, lon] }) // Adjust based on your model input
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('prediction').innerText = 'Predicted Load: ' + data.prediction;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('prediction').innerText = 'Error fetching prediction.';
+            });
+        }
+
+        function findTransformer() {
+            var transformerId = document.getElementById('transformerId').value;
+            var found = transformers.find(t => t.id === transformerId || (t.suburbs && t.suburbs.find(suburb => suburb.id === transformerId)));
+            
+            if (found) {
+                var lat = found.lat || found.suburbs.find(suburb => suburb.id === transformerId).lat;
+                var lon = found.lon || found.suburbs.find(suburb => suburb.id === transformerId).lon;
+                map.setView([lat, lon], 15);
+                var popupContent = getPopupContent(found.suburbs ? found.suburbs.find(suburb => suburb.id === transformerId) : found);
+                L.popup()
+                    .setLatLng([lat, lon])
+                    .setContent(popupContent)
+                    .openOn(map);
+            } else {
+                alert('Transformer not found.');
+            }
+        }
+
+        // Function to simulate real-time data updates
+        function simulateRealTimeUpdates() {
+            transformers.forEach(function(t) {
+                if (t.suburbs) {
+                    t.suburbs.forEach(function(suburb) {
+                        suburb.oilLevel = Math.max(0, (suburb.oilLevel + (Math.random() - 0.5) * 5).toFixed(2));
+                        suburb.voltage = `${Math.floor(Math.random() * 20) + 230}V`;
+                        suburb.current = `${Math.floor(Math.random() * 10) + 10}A`;
+
+                        updateMarker(suburb);
+                    });
+                } else {
+                    t.oilLevel = Math.max(0, (t.oilLevel + (Math.random() - 0.5) * 5).toFixed(2));
+                    t.voltage = `${Math.floor(Math.random() * 20) + 230}V`;
+                    t.current = `${Math.floor(Math.random() * 10) + 10}A`;
+
+                    updateMarker(t);
+                }
+            });
+        }
+
+        function updateMarker(transformer) {
+            var marker = markers[transformer.id];
+            if (marker) {
+                marker.setIcon(L.divIcon({
+                    className: transformer.oilLevel < 50 ? 'custom-icon blinking' : 'custom-icon',
+                    html: '<div style="background-color:' + getColor(transformer.oilLevel) + '; width: 30px; height: 30px; border-radius: 50%; font-size: 16px; color: white; display: flex; align-items: center; justify-content: center;">' + transformer.oilLevel.toFixed(2) + '%</div>',
+                    iconSize: [30, 30]
+                }));
+                if (map.getBounds().contains(marker.getLatLng())) {
+                    marker.setPopupContent(getPopupContent(transformer));
+                }
+            }
+        }
+
+        // Polling interval to simulate real-time updates every 5 seconds
+        setInterval(simulateRealTimeUpdates, 5000);
+
+    </script>
+</body>
+</html>

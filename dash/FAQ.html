@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Frequently Asked Questions - Find answers to common questions about our services and policies.">
+  <meta name="keywords" content="FAQ, frequently asked questions, support, help">
+  <title>FAQ | Dashboard</title>
+  <!-- Import Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins" />
+  <!-- Font Awesome CDN link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Internal CSS -->
+  <style>
+    /* Import Google fonts */
+    @import url('https://fonts.googleapis.com/css?family=Poppins');
+
+    body {
+      display: flex;
+      font-family: "Poppins", sans-serif;
+      background: #f1eded;
+      margin: 0;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 70px;
+      height: 100vh;
+      padding: 0 1.7rem;
+      color: #fff;
+      overflow: hidden;
+      transition: all 0.5s linear;
+      background: rgb(98, 92, 122);
+    }
+
+    .sidebar:hover {
+      width: 240px;
+      transition: 0.5s;
+    }
+
+    .log {
+      height: 80px;
+      padding: 16px;
+    }
+
+    .menu {
+      height: 88%;
+      position: relative;
+      list-style: none;
+      padding: 0;
+    }
+
+    .menu li {
+      padding: 1rem;
+      margin: 8px 0;
+      border-radius: 8px;
+      transition: all 0.5s ease-in-out;
+    }
+
+    .menu li:hover,
+    .active {
+      background: #a398c2;
+    }
+
+    .menu a {
+      color: #fff;
+      font-size: 14px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .menu a span {
+      overflow: hidden;
+    }
+
+    .menu a i {
+      font-size: 1.2rem;
+    }
+
+    .main--content {
+      position: relative;
+      background: #f1eded;
+      width: 100%;
+      padding: 1rem;
+    }
+
+    .header--wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .header--title {
+      color: #463b68;
+    }
+
+    .faq-item {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .faq-item h3 {
+      margin: 0;
+      color: #463b68;
+      font-size: 18px;
+    }
+
+    .faq-item p {
+      color: #444a53;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="log"></div>
+    <ul class="menu">
+      <li>
+        <a href="index.html">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="profile.html">
+          <i class="fas fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </li>
+      <li>
+        <a href="statistics.html">
+          <i class="fas fa-chart-bar"></i>
+          <span>Statistics</span>
+        </a>
+      </li>
+      <li>
+        <a href="careers.html">
+          <i class="fas fa-briefcase"></i>
+          <span>Careers</span>
+        </a>
+      </li>
+      <li class="active">
+        <a href="faq.html">
+          <i class="fas fa-question-circle"></i>
+          <span>FAQ</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-star"></i>
+          <span>Testimonials</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+      </li>
+      <li class="logout">
+        <a href="#">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="main--content">
+    <div class="header--wrapper">
+      <div class="header--title">
+        <span>Frequently Asked Questions</span>
+        <h2>Help & Support</h2>
+      </div>
+    </div>
+
+    <div class="card--container">
+      <div class="faq-item">
+        <h3>How do I apply for a job?</h3>
+        <p>You can apply for a job by visiting the Careers page and clicking the "Apply Now" button for the position you are interested in.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>What qualifications are required for the Frontend Developer position?</h3>
+        <p>The ideal candidate should have experience with HTML, CSS, and JavaScript. Familiarity with modern frameworks like React or Angular is a plus.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How can I contact support?</h3>
+        <p>You can contact support via the contact form on our website or by emailing support@example.com.</p>
+      </div>
+
+      <!-- Add more FAQ items as needed -->
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformer Locator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 500px;
+        }
+        .leaflet-marker-icon {
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-container" class="container my-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title text-center mb-4">Login</h1>
+                        <form id="login-form">
+                            <div class="form-group">
+                                <label for="first-name">First Name:</label>
+                                <input type="text" class="form-control" id="first-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="password" class="form-control" id="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                            <div id="login-error" class="mt-3 text-danger"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-container" class="container my-5" style="display:none;">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title text-center mb-4">Transformer Locator</h1>
+                        <div class="form-group">
+                            <label for="transformer-id">Enter Transformer ID:</label>
+                            <input type="text" class="form-control" id="transformer-id" placeholder="enter your transformer id">
+                        </div>
+                        <button class="btn btn-primary btn-block mt-3" onclick="locateTransformer()">Find Transformer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="map" class="mt-5"></div>
+        <div class="modal fade" id="transformerModal" tabindex="-1" role="dialog" aria-labelledby="transformerModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="transformerModalLabel">Transformer Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>ID: <span id="transformer-id-display"></span></p>
+                        <p>Status: <span id="transformer-status"></span></p>
+                        <p>Last Maintenance: <span id="transformer-last-maintenance"></span></p>
+                        <p>Condition: <span id="transformer-condition"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Define marker colors based on transformer condition
+        const iconColors = {
+            'Excellent': 'green',
+            'Good': 'blue',
+            'Fair': 'red',
+            'Poor': 'orange' // Added 'Poor' for completeness
+        };
+
+        const transformers = [
+            {
+                id: 1234,
+                location: {
+                    lat: -17.831773,
+                    lng: 31.053028
+                },
+                status: 'Operational',
+                lastMaintenance: '2023-06-15',
+                condition: 'Good'
+            },
+            {
+                id: 5678,
+                location: {
+                    lat: -20.151253,
+                    lng: 28.584272
+                },
+                status: 'Offline',
+                lastMaintenance: '2022-11-20',
+                condition: 'Fair'
+            },
+            // Additional transformers in specific cities
+            {
+                id: 9101,
+                location: {
+                    lat: -20.1416, // Bulawayo
+                    lng: 28.5810
+                },
+                status: 'Operational',
+                lastMaintenance: '2023-05-10',
+                condition: 'Good'
+            },
+            {
+                id: 1121,
+                location: {
+                    lat: -18.9712, // Harare
+                    lng: 29.7499
+                },
+                status: 'Under Maintenance',
+                lastMaintenance: '2024-01-05',
+                condition: 'Fair'
+            },
+            {
+                id: 3141,
+                location: {
+                    lat: -19.4560, // Gweru
+                    lng: 29.8167
+                },
+                status: 'Operational',
+                lastMaintenance: '2023-09-12',
+                condition: 'Good'
+            },
+            {
+                id: 5161,
+                location: {
+                    lat: -18.9724, // Mutare
+                    lng: 32.6770
+                },
+                status: 'Offline',
+                lastMaintenance: '2023-03-22',
+                condition: 'Poor'
+            },
+            {
+                id: 7181,
+                location: {
+                    lat: -20.0660, // Masvingo
+                    lng: 30.8296
+                },
+                status: 'Operational',
+                lastMaintenance: '2024-02-28',
+                condition: 'Good'
+            }
+        ];
+
+        let map;
+        const markers = {};
+
+        function initMap() {
+            map = L.map('map').setView([-18.9712, 29.7499], 7); // Center map around Harare
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Add markers for each transformer
+            transformers.forEach(transformer => {
+                const color = iconColors[transformer.condition] || 'gray'; // Default color if condition is unknown
+                const marker = L.circleMarker([transformer.location.lat, transformer.location.lng], {
+                    radius: 8,
+                    fillColor: color,
+                    color: color,
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(map)
+                    .bindPopup(`<strong>ID:</strong> ${transformer.id}<br><strong>Status:</strong> ${transformer.status}<br><strong>Last Maintenance:</strong> ${transformer.lastMaintenance}<br><strong>Condition:</strong> ${transformer.condition}`)
+                    .on('click', () => showTransformerDetails(transformer));
+
+                // Store the marker in a dictionary
+                markers[transformer.id] = marker;
+            });
+        }
+
+        function showTransformerDetails(transformer) {
+            document.getElementById('transformer-id-display').textContent = transformer.id;
+            document.getElementById('transformer-status').textContent = transformer.status;
+            document.getElementById('transformer-last-maintenance').textContent = transformer.lastMaintenance;
+            document.getElementById('transformer-condition').textContent = transformer.condition;
+
+            $('#transformerModal').modal('show');
+        }
+
+        function locateTransformer() {
+            const transformerId = document.getElementById('transformer-id').value;
+            const transformer = transformers.find(t => t.id.toString() === transformerId);
+
+            if (transformer) {
+                map.setView([transformer.location.lat, transformer.location.lng], 12);
+                showTransformerDetails(transformer);
+            } else {
+                alert(`Transformer with ID ${transformerId} not found.`);
+            }
+        }
+
+        // Handle login form submission
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const firstName = document.getElementById('first-name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Simple validation (in real life, you'd want to do this server-side)
+            if (firstName && email && password) {
+                // Simulate successful login (replace with actual authentication logic)
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('app-container').style.display = 'block';
+                initMap();
+            } else {
+                document.getElementById('login-error').textContent = 'Please fill in all fields.';
+            }
+        });
+    </script>
+</body>
+</html>

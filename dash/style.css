@@ -1,0 +1,317 @@
+/* inport Google fonts cnd link */
+<link rel="stylesheet"href="https://fonts.googleapis.com/css?family=Poppins"/>
+*{
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  display: flex;
+}
+.sidebar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 70px;
+  height: 100vh;
+  padding: 0 1.7rem;
+  color: #fff;
+  overflow: hidden;
+  transition: all 0.5s linear;
+  background: rgb(98, 92, 122);
+}
+.sidebar:hover {
+width: 240px;
+transition: 0.5s;
+}
+.log {
+  height: 80px;
+  padding: 16px;
+}
+.menu{
+  height: 88%;
+  position: relative;
+  list-style: none;
+  padding: 0;
+}
+.menu li{
+  padding: 1rem;
+  margin: 8px 0;
+  border-radius: 8px;
+  transition: all 0.5s ease-in-out;
+}
+.menu li:hover,
+.active {
+ background: #a398c2;
+}
+.menu a {
+  color: #fff;
+  font-size: 14px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.menu a span{
+  overflow:hidden;
+}
+.menu a i {
+  font-size: 1.2rem;
+}
+
+
+  /* **** main body section *** */
+  .main--content{
+  position: relative;
+  background: #f1eded;
+  width: 100%;
+  padding: 1rem;
+  }
+
+  .header--wrapper img {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+.header--wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background: #fff;
+  border-radius:10px;
+  padding: 10px 2rem;
+  margin-bottom: 1rem;
+}
+.header--title {
+  color:#463b68 ;
+}
+.user--info {
+  display: flex;
+  align-items: center;
+  gap:1rem;
+}
+.search--box {
+  background: rgb(194, 193, 224);
+  border-radius:15px;
+  color: rgba(113, 99, 186, 255);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 12px;
+  }
+  .search--box input {
+    background: transparent;
+    padding: 10px;
+  }
+  .search--box i {
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.5s ease-out;
+  }
+  .search--box i:hover {
+    transform: scale(1.1);
+  }
+  
+
+  /* ****** card container ****** */
+  .card--container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+      }
+  .card--wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+      }
+  .main--title {
+    color: rgba(113, 99, 186, 255);
+    padding-bottom: 10px;
+    font-size: 15px;
+      } 
+  .payment--card {
+    background: rgb(229, 223, 223);
+    border-radius: 10px;
+    padding: 1.2rem;
+    width: 290px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.5s ease-in-out;
+      }   
+      .payment--card:hover {
+        transform: translateY(-5px);
+      }
+      .card--header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .amount {
+        display: flex;
+        flex-direction: column;
+      }
+      .title {
+        font-size: 12px;
+        font-weight: 200;
+      }
+      .amount--value {
+        font-size: 24px;
+        font-family: "Courier New", Courier,monospace;
+        font-weight: 600;
+      }
+      .icon {
+        color: #f8fdf7;
+        padding: 1rem;
+        height: 60px;
+        width: 60px;
+        text-align: center;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        background: red;
+      }
+      .card-detail {
+        font-size: 18px;
+        color: #777777;
+        letter-spacing: 2px;
+        font-family: "Courier New", Courier,monospace;
+      }
+
+      /* skilfull */
+
+      .i-name {
+        color: #444a53;
+        padding: 30px 30px 0 30px;
+        font-size: 24px;
+        font-weight: 700;
+      }
+      .values {
+        padding: 30px 30px 0 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .values .val-box{
+        background: #fff;
+        width: 235px;
+        padding: 16px 20px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+      }
+      .values .val-box i {
+        font-size: 25px;
+        width: 60px;
+        height: 60px;
+        line-height: 60px;
+        border-radius: 50%;
+        text-align: center;
+        color: #fff;
+        margin-right: 15px;
+      }
+      .val-box {
+        flex-direction: row;
+        justify-content: space-evenly;
+        transition: all 0.5s ease-in-out;
+      }
+      .val-box:hover {
+        transform: translateY(-5px);
+      }
+      .values .val-box:nth-child(1) i{
+        background: #7874EC;
+      }
+      .values .val-box:nth-child(2) i{
+        background: #d58ceb;
+      }
+      .values .val-box:nth-child(3) i{
+        background: #fa05bd;
+      }    
+      .values .val-box:nth-child(4) i{
+        background: #cf20c7;
+      }      
+      .values .val-box h3 { 
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .values .val-box span {
+        font-size: 18px;
+        color: #828997;
+      }
+      .card-detail {
+        color: #444a53;
+      }
+      .board {
+        width:94%;
+        margin: 30px 0 30px 30px;
+        overflow: auto;
+        background: #fff;
+        border-radius: 8px;
+      }
+
+      .board img {
+        width: 45px;
+        height: 45px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin: 15px;
+      }
+
+
+      .board h5 {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .board p {
+        font-weight: 400;
+        font-size: 13px;
+        color:#2e2e30
+      }
+      .board .people{
+        display: flex;
+        justify-content: flex-start;
+        text-align: start;
+      }
+      table{
+        border-collapse: collapse;
+      }
+      tr{
+        border-bottom: 1px solid #eef0f3;
+      }
+      thead td{
+        font-size: 14px;
+        text-transform: uppercase;
+        font-weight: 400;
+        background: #f9fafa;
+        padding: 15px;
+      }
+
+      tbody tr td {
+        padding: 10px 15px;
+      }
+      .active p{
+        background: #e5f8eb;
+        padding: 2px 10px;
+        display: inline-block;
+        border-radius: 40px;
+        color: #354144;
+      }
+      .active {
+        transition: all 0.5s ease-in-out;
+      }
+      .edit a {
+        text-decoration: none;
+        font-size: 14px;
+        color: #554cd1;
+        font-weight: 600;
+      }

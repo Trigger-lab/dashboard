@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Read testimonials from our clients and users. Discover their experiences and feedback about our services.">
+  <meta name="keywords" content="testimonials, client feedback, user reviews, experiences">
+  <title>Testimonials | Dashboard</title>
+  <!-- Import Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins" />
+  <!-- Font Awesome CDN link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Internal CSS -->
+  <style>
+    /* Import Google fonts */
+    @import url('https://fonts.googleapis.com/css?family=Poppins');
+
+    body {
+      display: flex;
+      font-family: "Poppins", sans-serif;
+      background: #f1eded;
+      margin: 0;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 70px;
+      height: 100vh;
+      padding: 0 1.7rem;
+      color: #fff;
+      overflow: hidden;
+      transition: all 0.5s linear;
+      background: rgb(98, 92, 122);
+    }
+
+    .sidebar:hover {
+      width: 240px;
+      transition: 0.5s;
+    }
+
+    .log {
+      height: 80px;
+      padding: 16px;
+    }
+
+    .menu {
+      height: 88%;
+      position: relative;
+      list-style: none;
+      padding: 0;
+    }
+
+    .menu li {
+      padding: 1rem;
+      margin: 8px 0;
+      border-radius: 8px;
+      transition: all 0.5s ease-in-out;
+    }
+
+    .menu li:hover,
+    .active {
+      background: #a398c2;
+    }
+
+    .menu a {
+      color: #fff;
+      font-size: 14px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .menu a span {
+      overflow: hidden;
+    }
+
+    .menu a i {
+      font-size: 1.2rem;
+    }
+
+    .main--content {
+      position: relative;
+      background: #f1eded;
+      width: 100%;
+      padding: 1rem;
+    }
+
+    .header--wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .header--title {
+      color: #463b68;
+    }
+
+    .testimonial-item {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .testimonial-item h3 {
+      margin: 0;
+      color: #463b68;
+      font-size: 18px;
+    }
+
+    .testimonial-item p {
+      color: #444a53;
+      margin: 0;
+    }
+
+    .testimonial-item span {
+      font-size: 14px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="log"></div>
+    <ul class="menu">
+      <li>
+        <a href="index.html">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="profile.html">
+          <i class="fas fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </li>
+      <li>
+        <a href="statistics.html">
+          <i class="fas fa-chart-bar"></i>
+          <span>Statistics</span>
+        </a>
+      </li>
+      <li>
+        <a href="careers.html">
+          <i class="fas fa-briefcase"></i>
+          <span>Careers</span>
+        </a>
+      </li>
+      <li>
+        <a href="faq.html">
+          <i class="fas fa-question-circle"></i>
+          <span>FAQ</span>
+        </a>
+      </li>
+      <li class="active">
+        <a href="testimonials.html">
+          <i class="fas fa-star"></i>
+          <span>Testimonials</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+      </li>
+      <li class="logout">
+        <a href="#">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="main--content">
+    <div class="header--wrapper">
+      <div class="header--title">
+        <span>Client Testimonials</span>
+        <h2>What Our Clients Say</h2>
+      </div>
+    </div>
+
+    <div class="card--container">
+      <div class="testimonial-item">
+        <h3>John Doe</h3>
+        <p>"The team was incredible to work with. They exceeded our expectations and delivered on time. Highly recommended!"</p>
+        <span>CEO, Company XYZ</span>
+      </div>
+
+      <div class="testimonial-item">
+        <h3>Jane Smith</h3>
+        <p>"Fantastic service! The attention to detail and the professionalism of the team were second to none. Thank you for a great experience."</p>
+        <span>Marketing Director, Company ABC</span>
+      </div>
+
+      <div class="testimonial-item">
+        <h3>Michael Johnson</h3>
+        <p>"I was impressed with the quality of work and the prompt communication throughout the project. Would definitely work with them again."</p>
+        <span>Product Manager, Company DEF</span>
+      </div>
+
+      <!-- Add more testimonial items as needed -->
+    </div>
+  </div>
+</body>
+</html>

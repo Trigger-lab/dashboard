@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard Design | By code inf</title>
+  <!-- Import Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins" />
+  <!-- Font Awesome CDN link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Internal CSS -->
+  <style>
+    /* Import Google fonts */
+    @import url('https://fonts.googleapis.com/css?family=Poppins');
+
+    * {
+      margin: 0;
+      padding: 0;
+      border: none;
+      outline: none;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      display: flex;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 90px;
+      height: 100vh;
+      padding: 0 1.7rem;
+      color: #fff;
+      overflow: hidden;
+      transition: all 0.5s linear;
+      background: rgb(98, 92, 122);
+    }
+
+    .sidebar:hover {
+      width: 240px;
+      transition: 0.5s;
+    }
+
+    .log {
+      height: 80px;
+      padding: 16px;
+    }
+
+    .menu {
+      height: 78%;
+      position: relative;
+      list-style: none;
+      padding: 0;
+    }
+
+    .menu li {
+      padding: 1rem;
+      margin: 8px 0;
+      border-radius: 8px;
+      transition: all 0.5s ease-in-out;
+    }
+
+    .menu li:hover,
+    .active {
+      background: #a398c2;
+    }
+
+    .menu a {
+      color: #fff;
+      font-size: 14px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .menu a span {
+      overflow: hidden;
+    }
+
+    .menu a i {
+      font-size: 1.2rem;
+    }
+
+    /* Main body section */
+    .main--content {
+      position: relative;
+      background: #f1eded;
+      width: 100%;
+      padding: 1rem;
+    }
+
+    .header--wrapper img {
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    .header--wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .header--title {
+      color: #463b68;
+    }
+
+    .user--info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .search--box {
+      background: rgb(194, 193, 224);
+      border-radius: 15px;
+      color: rgba(113, 99, 186, 255);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 12px;
+    }
+
+    .search--box input {
+      background: transparent;
+      padding: 10px;
+    }
+
+    .search--box i {
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.5s ease-out;
+    }
+
+    .search--box i:hover {
+      transform: scale(1.1);
+    }
+
+    /* Card container */
+    .card--container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+    }
+
+    .card--wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .main--title {
+      color: rgba(113, 99, 186, 255);
+      padding-bottom: 10px;
+      font-size: 15px;
+    }
+
+    .payment--card {
+      background: rgb(229, 223, 223);
+      border-radius: 10px;
+      padding: 1.2rem;
+      width: 290px;
+      height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.5s ease-in-out;
+    }
+
+    .payment--card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card--header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .amount {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .title {
+      font-size: 12px;
+      font-weight: 200;
+    }
+
+    .amount--value {
+      font-size: 24px;
+      font-family: "Courier New", Courier, monospace;
+      font-weight: 600;
+    }
+
+    .icon {
+      color: #f8fdf7;
+      padding: 1rem;
+      height: 60px;
+      width: 60px;
+      text-align: center;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      background: red;
+    }
+
+    .card-detail {
+      font-size: 18px;
+      color: #777777;
+      letter-spacing: 2px;
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    /* Skillful */
+    .i-name {
+      color: #444a53;
+      padding: 30px 30px 0 30px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .values {
+      padding: 30px 30px 0 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .values .val-box {
+      background: #fff;
+      width: 235px;
+      padding: 16px 20px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .values .val-box i {
+      font-size: 25px;
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      border-radius: 50%;
+      text-align: center;
+      color: #fff;
+      margin-right: 15px;
+    }
+
+    .val-box {
+      flex-direction: row;
+      justify-content: space-evenly;
+      transition: all 0.5s ease-in-out;
+    }
+
+    .val-box:hover {
+      transform: translateY(-5px);
+    }
+
+    .values .val-box:nth-child(1) i {
+      background: #7874EC;
+    }
+
+    .values .val-box:nth-child(2) i {
+      background: #d58ceb;
+    }
+
+    .values .val-box:nth-child(3) i {
+      background: #fa05bd;
+    }
+
+    .values .val-box:nth-child(4) i {
+      background: #cf20c7;
+    }
+
+    .values .val-box h3 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .values .val-box span {
+      font-size: 18px;
+      color: #828997;
+    }
+
+    .card-detail {
+      color: #444a53;
+    }
+
+    .board {
+      width: 94%;
+      margin: 30px 0 30px 30px;
+      overflow: auto;
+      background: #fff;
+      border-radius: 8px;
+    }
+
+    .board img {
+      width: 45px;
+      height: 45px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin: 15px;
+    }
+
+    .board h5 {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .board p {
+      font-weight: 400;
+      font-size: 13px;
+      color: #2e2e30;
+    }
+
+    .board .people {
+      display: flex;
+      justify-content: flex-start;
+      text-align: start;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    tr {
+      border-bottom: 1px solid #eef0f3;
+    }
+
+    thead td {
+      font-size: 14px;
+      text-transform: uppercase;
+      font-weight: 400;
+      background: #f9fafa;
+      padding: 15px;
+    }
+
+    tbody tr td {
+      padding: 10px 15px;
+    }
+
+    .active p {
+      background: #e5f8eb;
+      padding: 2px 10px;
+      display: inline-block;
+      border-radius: 40px;
+      color: #354144;
+    }
+
+    .active {
+      transition: all 0.5s ease-in-out;
+    }
+
+    .edit a {
+      text-decoration: none;
+      font-size: 14px;
+      color: #554cd1;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="log"></div>
+    <ul class="menu">
+      <li class="active">
+        <a href="#">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="goonerwashe.html">
+          <i class="fas fa-robot"></i>
+          <span>Transformers</span>
+        </a>
+      </li>
+      <li>
+        <a href="profile.html">
+          <i class="fas fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </li>
+      <li>
+        <a href="statistics.html">
+          <i class="fas fa-chart-bar"></i>
+          <span>Statistics</span>
+        </a>
+      </li>
+      <li>
+        <a href="careers.html">
+          <i class="fas fa-briefcase"></i>
+          <span>Careers</span>
+        </a>
+      </li>
+      <li>
+        <a href="FAQ.html">
+          <i class="fas fa-question-circle"></i>
+          <span>FAQ</span>
+        </a>
+      </li>
+      <li>
+        <a href="testimonials.html">
+          <i class="fas fa-star"></i>
+          <span>Testimonials</span>
+        </a>
+      </li>
+      <li>
+        <a href="settings.html">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+      </li>
+      <li class="logout">
+        <a href="Node.js">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="main--content">
+    <div class="header--wrapper">
+      <div class="header--title">
+        <span>Primary</span>
+        <h2>Dashboard</h2>
+      </div>
+      <div class="user--info">
+        <div class="search--box">
+          <i class="fa-solid fa-search"></i>
+          <input type="text" placeholder="Search" />
+        </div>
+        <img src="pics/img2.jpg" alt="" />
+      </div>
+    </div>
+
+    <div class="values">
+      <div class="val-box">
+        <i class="fas fa-users"></i>
+        <div>
+          <span class="card-detail">**** **** **** 6979</span>
+          <h3>8,267</h3>
+          <span>New Users</span>
+        </div>
+      </div>
+      <div class="val-box">
+        <i class="fas fa-shopping-cart"></i>
+        <div>
+          <span class="card-detail">**** **** **** 2316</span>
+          <h3>200,521</h3>
+          <span>Total Orders</span>
+        </div>
+      </div>
+      <div class="val-box">
+        <i class="fas fa-list icon"></i>
+        <div>
+          <span class="card-detail">**** **** **** 0983</span>
+          <h3>215,542</h3>
+          <span>Products Sold</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="board">
+      <table width="100%">
+        <thead>
+          <tr>
+            <td>Name</td>
+            <td>Title</td>
+            <td>Status</td>
+            <td>Role</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="people">
+              <img src="pics/img1.jpg" alt="" />
+              <div class="people-de">
+                <h5>Money Conversations</h5>
+                <p>Conver@gamail.com</p>
+              </div>
+            </td>
+            <td class="people-des">
+              <h5>DTEL</h5>
+              <p>Web Dev</p>
+            </td>
+            <td class="active"><p>Active</p></td>
+            <td class="role">
+              <p>Owner</p>
+            </td>
+            <td class="edit"><a href="#">Edit</a></td>
+          </tr>
+          <!-- Additional rows here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
